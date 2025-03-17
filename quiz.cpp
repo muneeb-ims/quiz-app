@@ -45,9 +45,6 @@ void instruction(){
     cout<<"(2). EACH QUESTION CARRY 5 MARKS"<<endl;
     cout<<"(3). TOTAL TEST CONSIST 50 MARKS."<<endl;
     cout<<"(4). good luck"<<endl;
-    cout<<"Get Ready! Your Quiz Will Begin In 10 Seconds!"<<endl;
-    clear_screen(10);
-
 }
 
 //valid username input
@@ -95,7 +92,7 @@ bool valid_classinput(string& Class){
 }
 
 //quiz function
-void quiz(){
+void quiz(  ){
     vector<pair<string,char>> questions{
         {"Who is the founder of C++ : \n(a)jeff bezzos \n(b)alan turing \n(c)Bjarne strousstrup \n(d)N.O.T ",'C'},
         {"What is the early name of C++ : \n(a) cpp. \n(b) C with classes \n(c) C \n(d) All of These.",'B'},
@@ -110,13 +107,11 @@ void quiz(){
         cin>>answer;
         answer=toupper(answer);
         if(answer == q.second){
-            score+=5;
+
         } else {
-            score-=5;
+
         }
     }
-    if (score < 0) score = 0;
-    cout << "Total Score: " << score << endl;
 }
 
 
@@ -139,10 +134,6 @@ int main(){
         cout<<"hi "<<username<<endl;
         instruction();
 
-        
-        quiz();
-
-        cout << "Thanks for visiting!";
     }
 
     return 1;
