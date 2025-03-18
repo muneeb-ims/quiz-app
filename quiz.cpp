@@ -10,7 +10,8 @@
 
 using namespace std;
 
-
+//point for each question
+const int Q_score=5;
 
 //stars print
 void asteriks(int n){
@@ -26,9 +27,10 @@ void asteriks(int n){
 
 // heading
 void interface(){
+
     asteriks(70);
-    cout<<"\033[1;31m                         Smart Quiz Application \033[22m" ;
-    cout<<"\033[31m"<<endl;
+    cout<<"\033[1;31m                         ThinkFast Quiz Application \033[22m" ;
+    cout<<"\033[1;31m"<<endl;
     asteriks(70);
 }
 
@@ -41,24 +43,23 @@ void clear_screen(int i){
 
 void instruction(){
     
-    cout<<"\033[32m Read the Instruction Carefully! "<<endl;
+    cout<<"\033[1;32m Read the Instruction Carefully! "<<endl;
     cout<<"(1). READ THE QUESTION CAREFULLY"<<endl;
     cout<<"(2). EACH QUESTION CARRY 5 MARKS"<<endl;
     cout<<"(3). TOTAL TEST CONSIST 50 MARKS."<<endl;
     cout<<"(4). No Negative marking"<<endl;
-    cout<<"(5). good luck"<<endl;
+    cout<<"(5). good luck\033[0m"<<endl;
 }
 
 //valid username input
-/*check username input by making parameter refrence variable so the change in variable cause effect to 
-refrence variable
-then using getline to take input for multiple word 
-*/
+// Function to validate username input by ensuring it contains only letters and spaces.
+
 bool valid_user_input(string& username){
     while(true){
         cout<<"Enter your name : "<<endl;
         getline(cin,username);
         bool valid=true;
+        // Check for non-alphabetical characters or special characters in the username.
         for(char ch:username){
             if(!isalpha(ch)&& ch != ' '){
                 valid =  false;
@@ -67,16 +68,13 @@ bool valid_user_input(string& username){
         }
 
         if(username.empty()){
-            cout<<"Invalid input. username cannot be empty."<<endl;
-            clear_screen(2);
-            interface();
+            cout<<"\033[31mInvalid input. username cannot be empty.\033[0m"<<endl;
+            continue;
         }
-        //for special character or non alphabet
+
         else if(!valid){
-            /*if after checking complete through for each loop if there any non character
-            or special the condition make valid bool false so using this condition reset the screen 
-            and give more chances to user again input*/
-            cout<<"033[32mInvalid input!. Username should only contain letters or spaces.033[0m"<<endl;
+            
+            cout<<"\033[32mInvalid input!. Username should only contain letters or spaces.\033[0m"<<endl;
             clear_screen(2);
             interface();
         }
@@ -105,11 +103,18 @@ bool valid_classinput(string& Class){
 }
 
 //quiz function
-void quiz(  ){
+void quiz( ofstream &write ){
     vector<pair<string,char>> questions{
-        {"Who is the founder of C++ : \n(a)jeff bezzos \n(b)alan turing \n(c)Bjarne strousstrup \n(d)N.O.T ",'C'},
-        {"What is the early name of C++ : \n(a) cpp. \n(b) C with classes \n(c) C \n(d) All of These.",'B'},
-        {"which one is Data type : \n(a) int\n(b) if-else \n(c)for \n(d) All of These",'A'},
+        {"\033[1;33m Who is the founder of C++ : \033[0m\n\033[34m(a)jeff bezzos \n(b)alan turing \n(c)Bjarne strousstrup \n(d)N.O.T \033[0m",'C'},
+        {"\033[1;36m What is the early name of C++ : \n(a) cpp. \n(b) C with classes \n(c) C \n(d) All of These.\033[0m",'B'},
+        {"\033[1;32m Which of the following is used to declare a \n in C++ : \n(a) var x;\n(b) int x; \n(c)declare int x; \n(d) All of These\033[0m",'B'},
+        {"\033[1;35m which one is Data type : \n(a) int\n(b) if-else \n(c)for \n(d) All of These\033[0m",'A'},
+        {"\033[1;36m What is the correct syntax to print Hello, World! in C++? : \n(a) echo Hello, World!\n(b) cout << Hello, World!; \n(c)print(Hello, World!) \n(d) N.O.T\033[0m",'B'},
+        {"\033[1;37m Which of the following data types can store a floating-point number in C++? : \n(a) int\n(b) char \n(c)float \n(d) All of These\033[0m",'C'},
+        {"\033[1;36m What is the capital of Palestine? : \n(a) Jerusalem\n(b) Ramallah \n(c)Gaza \n(d) Bethlehem\033[0m",'B'},
+        {"\033[1;35m Which of the following is a correct way to declare a pointer in C++? : \n(a) int* ptr;\n(b) ptr int*; \n(c)pointer int*; \n(d) int ptr*;\033[0m",'A'},
+        {"\033[1;34m What is the purpose of the delete operator in C++? : \n(a) It initializes variables\n(b) It is used for deallocating stack memory \n(c)t frees the dynamically allocated memory. \n(d) It returns memory to the heap\033[0m",'C'},
+        {"\033[1;34m What is the name of the first artificial Earth satellite? : \n(a) Voyager 1\n(b) Hubble \n(c)Apollo 11. \n(d) Sputnik 1\033[0m",'C'},
         
     };
     random_device rd;
@@ -122,17 +127,20 @@ void quiz(  ){
     for(auto&  q: questions){
         do{
         //equalizing the pair of vector of string and char to q
-        cout<<q.first<<"\nYour Answer : ";
+        cout<<q.first<<"\n\033[36mYour Answer : ";
         // q.first the string of pair because the string is in first to order
-        cin>>answer;
+        cin>>ws;//to ignore spaces or enter accidently press by the user 
+        answer=cin.get();
+        //ignore extra input 
+        cin.ignore(numeric_limits<streamsize>::max(),'\n');
+            cout<<"\033[0m";
         answer=toupper(answer);
         if(answer!='A' &&answer!='B'&&answer!='C'&&answer!='D'){
             cout<<"Invalid choice! Please enter A,B,C or D."<<endl;
-
         }
         }while(answer!='A' &&answer!='B'&&answer!='C'&&answer!='D');
         if(answer == q.second){
-            score+=5;
+            score+=Q_score;
             cout<<"\033[32mCorrect!\033[0m"<<endl;
             //adding 5 marks on the righht answer
         } else {
@@ -140,14 +148,14 @@ void quiz(  ){
         }
         clear_screen(1);
     }
-    cout<<"Your final score is : "<<score<<"/"<<questions.size()*5<<endl;
-    ofstream write("USERdata.txt",ios::app);
+    cout<<"\033[35mYour final score is : "<<score<<"/"<<questions.size()*5<<"\033[0m"<<endl;
+   // Write the user's data (name, class, and score) to the file after the quiz.
+
     if (write.is_open()){
         write << "Final Score : "<<score<<"/"<<questions.size()*5<<endl;
-        write.close();
     }
     else{
-        cout<<"Error unable to open the file "<<endl;
+        cout<<"\033[31mError unable to open the file \033[0m"<<endl;
     }
 }
 
@@ -158,13 +166,13 @@ int main(){
     
     interface();
 
+    ofstream write("USERdata.txt",ios::app);
     if(valid_user_input(username)){
         valid_classinput(Class);
-        ofstream write("USERdata.txt");
         if(write.is_open()){
             write<<"User name : "<<username<<endl;
             write<<"class : "<<Class<<endl;
-            write.close();
+            
         }else{
             cout<<"Error: Unable to open file for writing."<<endl;
         }
@@ -175,7 +183,13 @@ int main(){
         system("pause");
         this_thread::sleep_for(chrono::seconds(1));
         system("cls");
-        quiz();
+        char choice;
+        do{
+        quiz(write);
+        cout<<"\033[1;34mDo you want to play again? (Y/N): \033[0m";
+        cin>>choice;
+        }while(choice=='y'||choice=='Y');
+        write.close();
 
     }
 
